@@ -197,8 +197,10 @@ def main():
     ports = Ports(int(config['shared']['port_offset']))
 
     try:
-        udp_proxy_proc1 = sp.Popen('udpproxy.exe %d' % ports['gameserver1'])
-        udp_proxy_proc2 = sp.Popen('udpproxy.exe %d' % ports['gameserver2'])
+        wine64env = os.environ.copy()
+        wine64env['WINEPREFIX'] = '/home/tribes/.wine64'
+        udp_proxy_proc1 = sp.Popen('udpproxy.exe %d' % ports['gameserver1'], env=wine64env)
+        udp_proxy_proc2 = sp.Popen('udpproxy.exe %d' % ports['gameserver2'], env=wine64env)
 
     except OSError as e:
         print('Failed to run udpproxy.exe. Run download_udpproxy.py to download it\n'
